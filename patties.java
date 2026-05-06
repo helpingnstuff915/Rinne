@@ -27,4 +27,12 @@ public class patties{
     public int[] getPatties() {
         return order;
     }
+
+    public void flip(){//flip the patties lol (reverses order of array)
+        for (int i = 0; i < order.length / 2; i++) {
+            int temp = order[i];
+            order[i] = order[order.length - 1 - i];
+            order[order.length - 1 - i] = temp;
+        }
+    }
 }
