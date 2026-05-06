@@ -11,6 +11,8 @@ public class patties{
                     live++; // Increment the count of live patties
                 }
             }
+            System.out.println("Patties order: " + java.util.Arrays.toString(order));
+
             // for (int patty : order) {
             //     if(live >= liveNum){
             //         order[patty] = 0; // Mark as dead
