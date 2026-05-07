@@ -1,18 +1,11 @@
 public class patties{
     private int[] order;
+    private int liveNum;
+    private int pattyNum;
     public patties(int pattyNum, int liveNum){
-        this.order = new int[pattyNum]; // Assuming pattyNum patties in the order
-            int live = 0;
-            while (live < liveNum) {
-                int randomIndex = (int)(Math.random() * pattyNum); // Randomly select an index
-                if (order[randomIndex] == 0) {
-                    order[randomIndex] = 1;
-                    // 1 means live, 0 means a blank
-                    live++; // Increment the count of live patties
-                }
-            }
-            System.out.println("Patties order: " + java.util.Arrays.toString(order));
-
+        this.liveNum = liveNum;
+        this.pattyNum = pattyNum;
+        order = new int[pattyNum];
             // for (int patty : order) {
             //     if(live >= liveNum){
             //         order[patty] = 0; // Mark as dead
@@ -24,7 +17,24 @@ public class patties{
             // }
     }
 
-    public int[] getPatties() {
+    public int getPatties() {
+        return liveNum;
+    }
+
+    public void setOrder(int[] newOrder) {
+            int live = 0;
+            while (live < liveNum) {
+                int randomIndex = (int)(Math.random() * pattyNum); // Randomly select an index
+                if (order[randomIndex] == 0) {
+                    order[randomIndex] = 1;
+                    // 1 means live, 0 means a blank
+                    live++; // Increment the count of live patties
+                }
+            }
+            System.out.println("Patties order: " + java.util.Arrays.toString(order));
+    }
+
+    public int[] getPoisonedPatties() {
         return order;
     }
 

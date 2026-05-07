@@ -11,10 +11,17 @@ public class Mainthing {
     }
 
     public static void startGame() {
+        //Initialization (search 111 to see the end)
         player player1 = new player("placeholder", 0, 0, 0, 0);//name, health, attack, defense
+        player player2 = new player("placeholder", 0, 0, 0, 0);//adding details later
         String p2name = "placeholder";
+        patties platter = new patties(0, 0);//num of patties, num of poisoned patties
         clearScreen();
         type("Welcome to the game!", 100, "Yellow");
+        //for funsies
+        if (ask("Do you want to play?","yes,no").equals("no")) {
+            System.exit(0);
+        }
         if(ask("Skip intro?","yes,no").equals("no")){
             type("This is a game about patties. ", 100, "Green");
             type("You have to eat them to win.", 100, "Green");
@@ -50,7 +57,7 @@ public class Mainthing {
                     continue;
                 }
             }
-            patties platter = new patties(Integer.parseInt(lastAnswer), Integer.parseInt(lastAnswer));
+            platter = new patties(pattiesNum, poisonedNum);
 
             ask("How many power-ups do you want? (max 3)", "0,1,2,3");
             if(Integer.parseInt(lastAnswer) > 3 || Integer.parseInt(lastAnswer) < 0){
@@ -79,7 +86,7 @@ public class Mainthing {
                 }else{
                     player1.setHealth(Integer.parseInt(lastAnswer));
                     if(CPU){
-                        player player2 = new player("Computer", Integer.parseInt(lastAnswer), 0, 0, 0);
+                        player2.setName("Computer"); 
                         currentPowerups = 0;
                     while(currentPowerups < powerUps){
                         if(Math.random() < 0.33){
@@ -93,8 +100,8 @@ public class Mainthing {
                     }
                     // System.out.println("The computer got " + player2.getDoublePatty() + " double patty, " + player2.getSkipTurn() + " skip turn, and " + player2.getRearange() + " rearrange power-ups!");
                     }else{
-                        player player2 = new player("Placeholder", Integer.parseInt(lastAnswer), 0, 0, 0);
                         player2.setName(p2name);
+                        player2.setHealth(Integer.parseInt(lastAnswer));
                         currentPowerups = 0;
                         while(currentPowerups < powerUps){
                             if(Math.random() < 0.33){
@@ -125,6 +132,61 @@ public class Mainthing {
                 break;
 
             }
+        }
+        //111, end of initialization, starting game
+        while(player1.getHealth() > 0 && (player2.getHealth() > 0)){
+            //player 1 turn
+
+            type("It's " + player1.getName() + "'s turn!", 100, "Yellow");
+            //show power-ups
+            type("You have " + player1.getDoublePatty() + " double patty, " + player1.getSkipTurn() + " skip turn, and " + player1.getRearange() + " rearrange power-ups!", 100, "Green");
+            //ask if they want to use a power-up
+            type("Type eat to eat a patty", 100, "Yellow");
+            type("Type powerup to use a power-up", 100, "Yellow");
+            type("Type give to give the patty to the opponent", 100, "Yellow");
+            ask("What do you want to do?","eat,powerup,give");
+            switch (lastAnswer) {
+                case "eat":
+                    //eating part (not fully implemented yet)
+                    //you would ask which patty they want to eat and then check if its poisoned or not and then update health accordingly
+                    break;
+                case "powerup":
+                    ask("Which power-up do you want to use?","double patty,skip turn,rearrange");
+                    switch (lastAnswer) {
+                        case "double patty":
+                            if(player1.getDoublePatty() > 0){
+                                player1.setDoublePatty(player1.getDoublePatty() - 1);
+                                //effect of double patty is handled in the eating part
+                            } else {
+                                type("You don't have any double patty power-ups left!", 100, "Red");
+                            }
+                            break;
+                        case "skip turn":
+                            if(player1.getSkipTurn() > 0){
+                                player1.setSkipTurn(player1.getSkipTurn() - 1);
+                                type("You skipped your turn!", 100, "Green");
+                                continue;//skips the rest of the loop and goes to the next iteration (player 2's turn)
+                            } else {
+                                type("You don't have any skip turn power-ups left!", 100, "Red");
+                            }
+                            break;
+                        case "rearrange":
+                            if(player1.getRearange() > 0){
+                                player1.setRearange(player1.getRearange() - 1);
+                                platter.flip();
+                                type("You reversed the order of the patties!", 100, "Green");
+                            } else {
+                                type("You don't have any rearrange power-ups left!", 100, "Red");
+                            }
+                            break;
+                    }
+                        break;
+                case "give":
+                    type("You gave the patty to " + player2.getName() + "!", 100, "Green");
+                    break;
+            }
+            //eating part (not fully implemented yet)
+            //you would ask which patty they want to eat and then check if its poisoned or not and then update health accordingly
         }
     }
 
