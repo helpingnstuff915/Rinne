@@ -4,15 +4,15 @@ public class player{
     private int doublePatty;
     private int skipTurn;
     private int rearange;
+    private boolean skipNextTurn;
+    private boolean doubleNextPatty;
 
-    public player(String name, int health, int attack, int defense, int doublePatty, int skipTurn, int rearange) {
+    public player(String name, int health, int doublePatty, int skipTurn, int rearange) {
         this.name = name;
         this.health = health;
         this.doublePatty = doublePatty;
         this.skipTurn = skipTurn;
         this.rearange = rearange;
-        // this.attack = attack;
-        // this.defense = defense;
     }
 
     // Getters and setters for each field
@@ -54,5 +54,32 @@ public class player{
 
     public void setRearange(int rearange) {
         this.rearange = rearange;
+    }
+
+    public boolean isSkipNextTurn() {
+        return skipNextTurn;
+    }
+
+    public void setSkipNextTurn(boolean skipNextTurn) {
+        this.skipNextTurn = skipNextTurn;
+    }
+
+    public boolean isDoubleNextPatty() {
+        return doubleNextPatty;
+    }
+
+    public void setDoubleNextPatty(boolean doubleNextPatty) {
+        this.doubleNextPatty = doubleNextPatty;
+    }
+
+    public void eatPatty(int currentPatty, patties p){
+        if(p.isPoisoned(currentPatty)==true){
+             if(doubleNextPatty){
+                health -= 2;
+                doubleNextPatty = false;
+            } else {
+                health -= 1;
+            }
+        }
     }
 }

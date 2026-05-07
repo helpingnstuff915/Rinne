@@ -17,11 +17,19 @@ public class patties{
             // }
     }
 
-    public int getPatties() {
-        return liveNum;
+    public int[] getPatties() {
+        return order;
     }
 
-    public void setOrder(int[] newOrder) {
+    public boolean isPoisoned(int currentPatty){
+        if(order[currentPatty] == 0){
+            return false;
+        } else {
+            return true;
+        } 
+    }
+
+    public void setOrder() {
             int live = 0;
             while (live < liveNum) {
                 int randomIndex = (int)(Math.random() * pattyNum); // Randomly select an index
@@ -32,10 +40,6 @@ public class patties{
                 }
             }
             System.out.println("Patties order: " + java.util.Arrays.toString(order));
-    }
-
-    public int[] getPoisonedPatties() {
-        return order;
     }
 
     public void flip(){//flip the patties lol (reverses order of array)
