@@ -6,6 +6,7 @@ public class player{
     private int rearange;
     private boolean skipNextTurn;
     private boolean doubleNextPatty;
+    private boolean initialized = false;
 
     public player(String name, int health, int doublePatty, int skipTurn, int rearange) {
         this.name = name;
@@ -77,10 +78,8 @@ public class player{
     }
 
     public void powerUpsInit(player plays){
-        Mainthing.ask("How many power-ups do you want? (max 3)", "0,1,2,3");
-        if(Integer.parseInt(Mainthing.lastAnswer) > 3 || Integer.parseInt(Mainthing.lastAnswer) < 0){
-            Mainthing.type("Please enter a number between 0 and 3.", 100, "Red");
-        }else{
+        Mainthing.ask("How many power-ups do you want? (max 5)", "0,1,2,3,4,5");
+       if(!initialized){
             int powerUps = Integer.parseInt(Mainthing.lastAnswer);
             int currentPowerups = 0;
             while(currentPowerups < powerUps){
@@ -94,10 +93,11 @@ public class player{
                 currentPowerups++;
             }
         }
+        initialized = true;
     }
 
     public void livesInit(){
-        
+
     }
 
     public void powerUps(patties p){
