@@ -71,9 +71,9 @@ public class Mainthing {
             ask("How many of them are poisoned? (max " + (pattiesNum - 1) + ")", poisonedOptions);
             platter = new patties(pattiesNum, Integer.parseInt(lastAnswer));
             platter.setOrder();
-
-            player1.powerUpsInit(player1);
-            player2.powerUpsInit(player2);
+            int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 5)", "0,1,2,3,4,5"));
+            player1.powerUpsInit(powersCount);
+            player2.powerUpsInit(powersCount);
             player1.livesInit();
             player1.setHealth(Integer.parseInt(ask("How many lives is dealt to each player? (max 10)", "1,2,3,4,5,6,7,8,9,10")));
             player2.setHealth(Integer.parseInt(lastAnswer));

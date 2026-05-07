@@ -6,7 +6,6 @@ public class player{
     private int rearange;
     private boolean skipNextTurn;
     private boolean doubleNextPatty;
-    private boolean initialized = false;
 
     public player(String name, int health, int doublePatty, int skipTurn, int rearange) {
         this.name = name;
@@ -77,23 +76,18 @@ public class player{
         }
     }
 
-    public void powerUpsInit(player plays){
-        Mainthing.ask("How many power-ups do you want? (max 5)", "0,1,2,3,4,5");
-       if(!initialized){
-            int powerUps = Integer.parseInt(Mainthing.lastAnswer);
-            int currentPowerups = 0;
-            while(currentPowerups < powerUps){
-                if(Math.random() < 0.33){
-                    plays.setDoublePatty(plays.getDoublePatty() + 1);
-                } else if (Math.random() < 0.5) {
-                    plays.setSkipTurn(plays.getSkipTurn() + 1);
-                } else {
-                    plays.setRearange(plays.getRearange() + 1);
-                }
-                currentPowerups++;
+    public void powerUpsInit(int powerUps){
+        int currentPowerups = 0;
+        while(currentPowerups < powerUps){
+            if(Math.random() < 0.33){
+                this.setDoublePatty(this.getDoublePatty() + 1);
+            } else if (Math.random() < 0.5) {
+                this.setSkipTurn(this.getSkipTurn() + 1);
+            } else {
+                this.setRearange(this.getRearange() + 1);
             }
+            currentPowerups++;
         }
-        initialized = true;
     }
 
     public void livesInit(){
