@@ -76,6 +76,30 @@ public class player{
         }
     }
 
+    public void powerUpsInit(player plays){
+        Mainthing.ask("How many power-ups do you want? (max 3)", "0,1,2,3");
+        if(Integer.parseInt(Mainthing.lastAnswer) > 3 || Integer.parseInt(Mainthing.lastAnswer) < 0){
+            Mainthing.type("Please enter a number between 0 and 3.", 100, "Red");
+        }else{
+            int powerUps = Integer.parseInt(Mainthing.lastAnswer);
+            int currentPowerups = 0;
+            while(currentPowerups < powerUps){
+                if(Math.random() < 0.33){
+                    plays.setDoublePatty(plays.getDoublePatty() + 1);
+                } else if (Math.random() < 0.5) {
+                    plays.setSkipTurn(plays.getSkipTurn() + 1);
+                } else {
+                    plays.setRearange(plays.getRearange() + 1);
+                }
+                currentPowerups++;
+            }
+        }
+    }
+
+    public void livesInit(){
+        
+    }
+
     public void powerUps(patties p){
         if(this.doublePatty +this.skipTurn + this.rearange == 0){
             Mainthing.type("You have no power-ups left!",100, "Red");
@@ -85,7 +109,7 @@ public class player{
             Mainthing.type(this.rearange + " rearranges left.",100, "Green");
             Mainthing.ask("Which power up do you want to use?", "DP,ST,RA");
             switch (Mainthing.lastAnswer){
-                case "DP":
+                case "DP"->{
                     if(this.doublePatty <= 0){
                         Mainthing.type("You don't have any double patty power-ups left!", 100, "Red");
                     }else{
@@ -93,8 +117,8 @@ public class player{
                         Mainthing.type("Yummers, a double patty!", 100, "Green");
                         this.setDoubleNextPatty(true);
                     }
-                    break;
-                case "ST":
+                }
+                case "ST"->{
                     if(this.skipTurn <= 0){
                         Mainthing.type("You don't have any skip turn power-ups left!", 100, "Red");
                     }else{
@@ -106,8 +130,8 @@ public class player{
                             Mainthing.type("You skipped your opponent's next turn!", 100, "Green");
                         }
                     }
-                    break;
-                case "RA":
+                }
+                case "RA"->{
                     if(this.rearange <= 0){
                         Mainthing.type("You don't have any rearrange power-ups left!", 100, "Red");
                     }else{
@@ -119,7 +143,7 @@ public class player{
                             p.setOrder();
                         }
                     }
-                    break;
+                }
             }
         }
     }

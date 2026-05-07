@@ -6,15 +6,7 @@ public class patties{
         this.poisoned = poisoned;
         this.pattyNum = pattyNum;
         order = new int[pattyNum];
-            // for (int patty : order) {
-            //     if(live >= poisoned){
-            //         order[patty] = 0; // Mark as dead
-            //     } else {
-            //         order[patty] = 1; // Mark as alive
-            //         live++;
-            //     }
-            //     order[i] = (int)(Math.random() * poisoned) + 1; // Randomly assign a live number to each patty
-            // }
+
     }
 
     public void setpattyNum(int pattyNum) {
@@ -35,11 +27,7 @@ public class patties{
     }
 
     public boolean isPoisoned(int currentPatty){
-        if(order[currentPatty] == 0){
-            return false;
-        } else {
-            return true;
-        } 
+        return order[currentPatty] != 0;
     }
 
     public void setOrder() {
@@ -56,13 +44,6 @@ public class patties{
             }
             System.out.println("Patties order: " + java.util.Arrays.toString(order));
     }
-
-    //
-        // if(ragebait.equals("denied")){
-        //     flip();
-        // }
-
-    //
 
     public void flip(){//flip the patties lol (reverses order of array)
         for (int i = 0; i < order.length / 2; i++) {
