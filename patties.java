@@ -1,20 +1,33 @@
 public class patties{
     private int[] order;
-    private int liveNum;
+    private int poisoned;
     private int pattyNum;
-    public patties(int pattyNum, int liveNum){
-        this.liveNum = liveNum;
+    public patties(int pattyNum, int poisoned){
+        this.poisoned = poisoned;
         this.pattyNum = pattyNum;
         order = new int[pattyNum];
             // for (int patty : order) {
-            //     if(live >= liveNum){
+            //     if(live >= poisoned){
             //         order[patty] = 0; // Mark as dead
             //     } else {
             //         order[patty] = 1; // Mark as alive
             //         live++;
             //     }
-            //     order[i] = (int)(Math.random() * liveNum) + 1; // Randomly assign a live number to each patty
+            //     order[i] = (int)(Math.random() * poisoned) + 1; // Randomly assign a live number to each patty
             // }
+    }
+
+    public void setpattyNum(int pattyNum) {
+        this.pattyNum = pattyNum;
+        order = new int[pattyNum];
+    }
+
+    public void setPoisoned(int poisoned) {
+        this.poisoned = poisoned;
+    }
+
+    public int getPoisoned() {
+        return poisoned;
     }
 
     public int[] getPatties() {
@@ -30,17 +43,26 @@ public class patties{
     }
 
     public void setOrder() {
-            int live = 0;
-            while (live < liveNum) {
+            java.util.Arrays.fill(order, 0); // re-init all array values
+            int filled = 0;
+
+            while (filled < poisoned) {
                 int randomIndex = (int)(Math.random() * pattyNum); // Randomly select an index
                 if (order[randomIndex] == 0) {
                     order[randomIndex] = 1;
                     // 1 means live, 0 means a blank
-                    live++; // Increment the count of live patties
+                    filled++; // Increment the count of live patties
                 }
             }
             System.out.println("Patties order: " + java.util.Arrays.toString(order));
     }
+
+    //
+        // if(ragebait.equals("denied")){
+        //     flip();
+        // }
+
+    //
 
     public void flip(){//flip the patties lol (reverses order of array)
         for (int i = 0; i < order.length / 2; i++) {

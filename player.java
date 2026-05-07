@@ -66,10 +66,62 @@ public class player{
 
     public boolean isDoubleNextPatty() {
         return doubleNextPatty;
+//all eating/ power ups should be handeled here in the player class!
     }
 
     public void setDoubleNextPatty(boolean doubleNextPatty) {
         this.doubleNextPatty = doubleNextPatty;
+        if(doubleNextPatty){
+            Mainthing.type("Your next patty will be a double patty!",100, "Green");
+        }
+    }
+
+    public void powerUps(patties p){
+        if(this.doublePatty +this.skipTurn + this.rearange == 0){
+            Mainthing.type("You have no power-ups left!",100, "Red");
+        }else{
+            Mainthing.type("You have " + this.doublePatty + " double patties, ", 100, "Green");
+            Mainthing.type(this.skipTurn + " skip turns, and ",100,"Green");
+            Mainthing.type(this.rearange + " rearranges left.",100, "Green");
+            Mainthing.ask("Which power up do you want to use?", "DP,ST,RA");
+            switch (Mainthing.lastAnswer){
+                case "DP":
+                    if(this.doublePatty <= 0){
+                        Mainthing.type("You don't have any double patty power-ups left!", 100, "Red");
+                    }else{
+                        this.doublePatty -= 1;
+                        Mainthing.type("Yummers, a double patty!", 100, "Green");
+                        this.setDoubleNextPatty(true);
+                    }
+                    break;
+                case "ST":
+                    if(this.skipTurn <= 0){
+                        Mainthing.type("You don't have any skip turn power-ups left!", 100, "Red");
+                    }else{
+                        if(this.isSkipNextTurn()){
+                            Mainthing.type("You can only use that once per round!", 100, "Red");
+                        } else {
+                            this.skipTurn -= 1;
+                            this.setSkipNextTurn(true);
+                            Mainthing.type("You skipped your opponent's next turn!", 100, "Green");
+                        }
+                    }
+                    break;
+                case "RA":
+                    if(this.rearange <= 0){
+                        Mainthing.type("You don't have any rearrange power-ups left!", 100, "Red");
+                    }else{
+                        if(Mainthing.currentPatty == 0){
+                            Mainthing.type("You can't rearrange the patties on the first turn!", 100, "Red");
+                        } else {
+                            this.rearange -= 1;
+                            Mainthing.type("The patties have been rearranged!", 100, "Green");
+                            p.setOrder();
+                        }
+                    }
+                    break;
+            }
+        }
     }
 
     public void eatPatty(int currentPatty, patties p){

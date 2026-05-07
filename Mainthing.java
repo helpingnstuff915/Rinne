@@ -3,72 +3,21 @@
 import java.util.Scanner;//for user input dangit
 
 public class Mainthing {
+    public patties platter;
     public static String lastAnswer = "";
     public static int currentPatty = 0;
     public static boolean CPU = false;//against computer
-    public static void main(String[] args) {//I keep forgetting how to init, i js copy paste
+    public void main(String[] args) {//I keep forgetting how to init, i js copy paste
         type("init", 100, "Red");//js letting you know that its running
         startGame();
     }
 
-    public static void powerUp(player plays, patties p){
-        type("You currently have " + plays.getDoublePatty() + " double patties, ",100, "Green");
-        type(plays.getSkipTurn() + " skip turns ",100, "Green");
-        type("and "+ plays.getRearange() + " rearrange power-ups!", 100, "Green");
-        ask("Which power-up do you want to use?","double patty,skip turn,rearrange");
-        if(plays.getDoublePatty()+plays.getSkipTurn()+plays.getRearange() <= 0){
-            type("You don't have any power-ups left!", 100, "Red");
-            return;
-        }
-        switch (lastAnswer) {
-            case "double patty":
-                if(plays.getDoublePatty() <= 0){
-                    type("You don't have any double patty power-ups left!", 100, "Red");
-                }else{
-                    if(plays.isDoubleNextPatty()){
-                        type("It's already a double patty!", 100, "Red");
-                        type("You can't eat a quadruple patty!", 100, "Red");
-                    }else{
-                        plays.setDoublePatty(plays.getDoublePatty() - 1);
-                        type("Yummers, a double patty!", 100, "Green");
-                        plays.setDoubleNextPatty(true);
-                    }
-                }
-                break;
-                //bro this code is lagging HARD, things are getting discoulred
-            case "skip turn":
-                if(plays.getSkipTurn() <= 0){
-                    type("You don't have any skip turn power-ups left!", 100, "Red");
-                }else{
-                    if(plays.isSkipNextTurn()){
-                        type("You can only use that once per round!", 100, "Red");
-                    } else {
-                        plays.setSkipTurn(plays.getSkipTurn() - 1);
-                        plays.setSkipNextTurn(true);
-                        type("You skipped your opponent's next turn!", 100, "Green");
-                    }
-                }
-                break;
-            case "rearrange":
-                if(plays.getDoublePatty() <= 0){
-                    type("You don't have any double patty power-ups left!", 100, "Red");
-                }else{
-                    //We dont need to check this, since it js wastes it
-                    plays.setRearange(plays.getRearange() - 1);
-                    p.flip();
-                    type("You reversed the order of the patties!", 100, "Green");
-                }
-                break;
-        }
-
-    }
-
-    public static void startGame() {
+    public void startGame() {
         //Initialization (search 111 to see the end)
         player player1 = new player("placeholder", 0, 0, 0, 0);//name, health, attack, defense
         player player2 = new player("placeholder", 0, 0, 0, 0);//adding details later
         String p2name = "placeholder";
-        patties platter = new patties(0, 0);//num of patties, num of poisoned patties
+        this.platter = new patties(0, 0);//num of patties, num of poisoned patties
         clearScreen();
         type("Welcome to the game!", 100, "Yellow");
         //for funsies
@@ -104,6 +53,7 @@ public class Mainthing {
                 continue;
             }else {
                 pattiesNum = Integer.parseInt(lastAnswer);
+                platter.setpattyNum(pattiesNum);
                 ask("How many of them are poisoned? (max " + (pattiesNum - 1) + ")", "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
                 if(Integer.parseInt(lastAnswer) > pattiesNum - 1 || Integer.parseInt(lastAnswer) < 1){
                     type("Please enter a number between 1 and " + (pattiesNum - 1) + ".", 100, "Red");
@@ -256,7 +206,7 @@ public class Mainthing {
                 lastAnswer = answer;
                 return answer;
             } else
-            if (options.contains(answer)) {
+            if (options.contains(answer) && answer.length() > 0) {
                 valid = true;
                 lastAnswer = answer;
                 return answer;
