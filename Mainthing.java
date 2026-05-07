@@ -3,16 +3,19 @@
 import java.util.Scanner;//for user input dangit
 
 public class Mainthing {
+    public static Scanner scammer = new Scanner(System.in);//heheh
     public patties platter;
     public static String lastAnswer = "";
     public static int currentPatty = 0;
     public static boolean CPU = false;//against computer
-    public void main(String[] args) {//I keep forgetting how to init, i js copy paste
+    public static void main(String[] args) {//I keep forgetting how to init, i js copy paste
         type("init", 100, "Red");//js letting you know that its running
-        startGame();
+        Mainthing game = new Mainthing();
+        game.setupGame();
+        game.playGame();
     }
 
-    public void startGame() {
+    public void setupGame() {
         //Initialization (search 111 to see the end)
         player player1 = new player("placeholder", 0, 0, 0, 0);//name, health, attack, defense
         player player2 = new player("placeholder", 0, 0, 0, 0);//adding details later
@@ -46,7 +49,6 @@ public class Mainthing {
         }
         while(true){
             int pattiesNum = 0;
-            int poisonedNum = 0;
             ask("How many patties are we ordering? (max 20)", "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20");
             if(Integer.parseInt(lastAnswer) > 20 || Integer.parseInt(lastAnswer) < 1){
                 type("Please enter a number between 1 and 20.", 100, "Red");
@@ -60,29 +62,10 @@ public class Mainthing {
                     continue;
                 }
             }
-            platter = new patties(pattiesNum, poisonedNum);
+            platter = new patties(pattiesNum, Integer.parseInt(lastAnswer));
             platter.setOrder();
-
+            player1.powerUpsInit(player1);
             ask("How many power-ups do you want? (max 3)", "0,1,2,3");
-            if(Integer.parseInt(lastAnswer) > 3 || Integer.parseInt(lastAnswer) < 0){
-                type("Please enter a number between 0 and 3.", 100, "Red");
-            }else{
-                int powerUps = Integer.parseInt(lastAnswer);
-                int currentPowerups = 0;
-                    while(currentPowerups < powerUps){
-                        if(Math.random() < 0.33){
-                            player1.setDoublePatty(player1.getDoublePatty() + 1);
-                        } else if (Math.random() < 0.5) {
-                            player1.setSkipTurn(player1.getSkipTurn() + 1);
-                        } else {
-                            player1.setRearange(player1.getRearange() + 1);
-                        }
-                        currentPowerups++;
-                    }
-                        //Initial tesing for valid distribution of power ups
-                        // its meant to be a secret, but only you can see it
-                        // The reason its not shown here is bc its shown later on
-                    // System.out.println("You got " + player1.getDoublePatty() + " double patty, " + player1.getSkipTurn() + " skip turn, and " + player1.getRearange() + " rearrange power-ups!");
                 ask("How many lives is dealt to each player? (max 10)", "1,2,3,4,5,6,7,8,9,10");
                 if(Integer.parseInt(lastAnswer) > 10 || Integer.parseInt(lastAnswer) < 1){
                     type("Please enter a number between 1 and 10.", 100, "Red");
@@ -90,34 +73,14 @@ public class Mainthing {
                 }else{
                     player1.setHealth(Integer.parseInt(lastAnswer));
                     if(CPU){
-                        player2.setName("Computer"); 
-                        currentPowerups = 0;
-                    while(currentPowerups < powerUps){
-                        if(Math.random() < 0.33){
-                            player2.setDoublePatty(player2.getDoublePatty() + 1);
-                        } else if (Math.random() < 0.5) {
-                            player2.setSkipTurn(player2.getSkipTurn() + 1);
-                        } else {
-                            player2.setRearange(player2.getRearange() + 1);
-                        }
-                        currentPowerups++;
-                    }
-                    // System.out.println("The computer got " + player2.getDoublePatty() + " double patty, " + player2.getSkipTurn() + " skip turn, and " + player2.getRearange() + " rearrange power-ups!");
+                        player2.setName("Computer");
                     }else{
                         player2.setName(p2name);
-                        player2.setHealth(Integer.parseInt(lastAnswer));
-                        currentPowerups = 0;
-                        while(currentPowerups < powerUps){
-                            if(Math.random() < 0.33){
-                                player2.setDoublePatty(player2.getDoublePatty() + 1);
-                            } else if (Math.random() < 0.5) {
-                                player2.setSkipTurn(player2.getSkipTurn() + 1);
-                            } else {
-                                player2.setRearange(player2.getRearange() + 1);
-                            }
-                            currentPowerups++;
-                        }
-                        // System.out.println(player2.getName() + " got " + player2.getDoublePatty() + " double patty, " + player2.getSkipTurn() + " skip turn, and " + player2.getRearange() + " rearrange power-ups!");
+                    }
+                    player2.setHealth(Integer.parseInt(lastAnswer));
+                    player2.powerUpsInit(player2);
+                    // System.out.println("The computer got " + player2.getDoublePatty() + " double patty, " + player2.getSkipTurn() + " skip turn, and " + player2.getRearange() + " rearrange power-ups!");
+                    // System.out.println(player2.getName() + " got " + player2.getDoublePatty() + " double patty, " + player2.getSkipTurn() + " skip turn, and " + player2.getRearange() + " rearrange power-ups!");
                     }
                     // This is the original code for the power ups distribution.
                     // currentPowerups = 0;
@@ -131,12 +94,9 @@ public class Mainthing {
                     //     }
                     //     currentPowerups++;
                     // }
-
-                }
-                break;
-
+                
+                break;//inorder to end the loop.
             }
-        }
         //111, end of initialization, starting game
         while(player1.getHealth() > 0 && (player2.getHealth() > 0)){
             //player 1 turn
@@ -150,31 +110,30 @@ public class Mainthing {
             type("Type give to give the patty to the opponent", 100, "Yellow");
             ask("What do you want to do?","eat,powerup,give");
             switch (lastAnswer) {
-                case "eat":
+                case "eat"->{
                     //eating part (not fully implemented yet)
                     //you would ask which patty they want to eat and then check if its poisoned or not and then update health accordingly
-                    break;
-                case "powerup":
+                }
+                case "powerup"->{
                     ask("Which power-up do you want to use?","double patty,skip turn,rearrange");
                     switch (lastAnswer) {
-                        case "double patty":
+                        case "double patty"->{
                             if(player1.getDoublePatty() > 0){
                                 player1.setDoublePatty(player1.getDoublePatty() - 1);
                                 //effect of double patty is handled in the eating part
                             } else {
                                 type("You don't have any double patty power-ups left!", 100, "Red");
                             }
-                            break;
-                        case "skip turn":
+                        }
+                        case "skip turn"->{
                             if(player1.getSkipTurn() > 0){
                                 player1.setSkipTurn(player1.getSkipTurn() - 1);
-                                type("You skipped your turn!", 100, "Green");
-                                continue;//skips the rest of the loop and goes to the next iteration (player 2's turn)
+                                type("You skipped your opponents turn!", 100, "Green");
                             } else {
                                 type("You don't have any skip turn power-ups left!", 100, "Red");
                             }
-                            break;
-                        case "rearrange":
+                        }
+                        case "rearrange"->{
                             if(player1.getRearange() > 0){
                                 player1.setRearange(player1.getRearange() - 1);
                                 platter.flip();
@@ -182,19 +141,23 @@ public class Mainthing {
                             } else {
                                 type("You don't have any rearrange power-ups left!", 100, "Red");
                             }
-                            break;
+                        }
                     }
-                        break;
-                case "give":
+                }
+                case "give"->{
                     type("You gave the patty to " + player2.getName() + "!", 100, "Green");
-                    break;
+                }
             }
-            }
+        }
+    }
+
+    public void playGame() {
+        // This is where the main game loop will go, but for now its just a placeholder
+        type("The game has started!", 100, "Yellow");
     }
 
     public static String ask(String question, String options) {
         boolean valid = false;
-        Scanner scammer = new Scanner(System.in);
         question = question + "?";//Incase you forget to add a question mark, it adds it for you
         //if you already did then it makes it look more emphasized, so its alr
         while(!valid){
@@ -202,12 +165,9 @@ public class Mainthing {
             String answer = scammer.nextLine();//jaja, scammer lol
             //in case anything goes
             if(options == null) {
-                valid = true;
                 lastAnswer = answer;
                 return answer;
-            } else
-            if (options.contains(answer) && answer.length() > 0) {
-                valid = true;
+            } else if (options.contains(answer) && answer.length() > 0) {
                 lastAnswer = answer;
                 return answer;
             } else {
@@ -224,28 +184,27 @@ public class Mainthing {
         final String Blue = "\u001B[34m";
         final String Yellow = "\u001B[33m";
         switch (colour) {
-            case "Red":
+            case "Red"->{
                 colour = Red;
-                break;
-            case "Green":
+            }
+            case "Green"->{
                 colour = Green;
-                break;
-            case "Blue":
+            }
+            case "Blue"->{
                 colour = Blue;
-                break;
-            case "Yellow":
+            }
+            case "Yellow"->{
                 colour = Yellow;
-                break;
-            default:
+            }
+            default->{
                 // No color
-                break;
+            }
         }
 
         for (char c : text.toCharArray()) {
             try {
                 Thread.sleep(speed);
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 Thread.currentThread().interrupt();
                 return;
             }
@@ -253,7 +212,6 @@ public class Mainthing {
         }
         System.out.println();
     }
-
     //Clears the console for a new game
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");//this is some cool stuff, Ansi escape codes
