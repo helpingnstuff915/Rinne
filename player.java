@@ -89,10 +89,6 @@ public class player{
         }
     }
 
-    public void livesInit(){
-
-    }
-
     public void powerUps(patties p, boolean skipTurnOn){
         if(this.doublePatty +this.skipTurn + this.rearange == 0){
             Mainthing.type("You have no power-ups left!",100, "Red");
@@ -143,13 +139,43 @@ public class player{
     }
 
     public void eatPatty(int currentPatty, patties p){
-        if(p.isPoisoned(currentPatty)==true){
-             if(doubleNextPatty){
-                health -= 2;
-                doubleNextPatty = false;
-            } else {
-                health -= 1;
+        if(p.isPoisoned(currentPatty)){
+            double temp = Math.random();
+            String rxn;
+            if(temp > 0.75){
+                rxn = "Ouch";
+            }else if(temp > 0.5){
+                rxn = "Bleh";
+            }else if(temp > 0.25){
+                rxn = "Yuck";
+            }else{
+                rxn = "Aw man";
             }
+            Mainthing.type( rxn + ", that patty was poisoned",100,"Red");
+
+            if(doubleNextPatty){
+                this.health -= 2;
+                //prevent from going nefative, for asthetics
+                if(this.health<0){
+                    this.health = 0;
+                }
+                doubleNextPatty = false;   
+                Mainthing.type(this.getName() + " lost 2 HP",100,"Red");
+            } else {
+                this.health -= 1;
+                Mainthing.type(this.getName() + " lost 1 HP",100,"Red");
+            }
+            this.doubleNextPatty = false;
+        }else{
+            Mainthing.type("Mmm... tasty!",100,"Green");
+            Mainthing.type("This patty is safe!",100,"Green");
+            this.doubleNextPatty = false;
+        }
+        currentPatty++;
+        if (currentPatty >= p.getPatties().length) {
+            Mainthing.type("\n--- All patties finished! Ordering a new round... ---", 100, "Yellow");
+            p.setOrder();//refill tray
+            Mainthing.currentPatty = 0;//reset
         }
     }
 

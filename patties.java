@@ -9,7 +9,7 @@ public class patties{
 
     }
 
-    public void setpattyNum(int pattyNum) {
+    public void setPattyNum(int pattyNum) {
         this.pattyNum = pattyNum;
         order = new int[pattyNum];
     }
