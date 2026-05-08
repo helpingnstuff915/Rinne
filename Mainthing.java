@@ -81,35 +81,51 @@ public class Mainthing {
         }
     }
     public void playerOneTurn(player plays) {
-        type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
-        //show power-ups
-        type("You have " + plays.getDoublePatty() + " double patty, " + plays.getSkipTurn() + " skip turn, and " + plays.getRearange() + " rearrange power-ups!", 100, "Green");
-        //ask if they want to use a power-up
-        type("Type eat to eat a patty", 100, "Yellow");
-        type("Type powerup to use a power-up", 100, "Yellow");
-        type("Type give to give the patty to the opponent", 100, "Yellow");
-        ask("What do you want to do?","eat,powerup,give");
-        switch (lastAnswer) {
-            case "eat"->{
-                type("You ate the patty!", 100, "Green");
-                plays.eatPatty(currentPatty, platter);
+        while(true){
+            type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
+            //show power-ups
+            type("You have " + plays.getDoublePatty() + " double patty, " + plays.getSkipTurn() + 
+            " skip turn, and " + plays.getRearange() + " rearrange power-ups!", 100, "Green");
+            //ask if they want to use a power-up
+            type("Type eat to eat a patty", 100, "Yellow");
+            type("Type powerup to use a power-up", 100, "Yellow");
+            type("Type give to give the patty to the opponent", 100, "Yellow");
+            ask("What do you want to do?","eat,powerup,give");
+            switch (lastAnswer) {
+                case "eat"->{
+                    type("You ate the patty!", 100, "Green");
+                    plays.eatPatty(currentPatty, platter);
+                    if(!(player1.isSkipNextTurn()||player2.isSkipNextTurn())){
+                        return;
+                    }else{
+                        player1.setSkipNextTurn(false);
+                        player2.setSkipNextTurn(false);
+                    }
+                }
+                case "powerup"->{
+                    plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
+                }
+                case "give"->{
+                    type("You gave the patty to " + player2.getName() + "!", 100, "Green");
+                    player2.eatPatty(currentPatty, platter);
+                    if(!(player1.isSkipNextTurn()||player2.isSkipNextTurn())){
+                        return;
+                    }else{
+                        player1.setSkipNextTurn(false);
+                        player2.setSkipNextTurn(false);
+                    }
+                }
             }
-            case "powerup"->{
-                plays.powerUps(platter);
-            }
-            case "give"->{
-                type("You gave the patty to " + player2.getName() + "!", 100, "Green");
-                player2.eatPatty(currentPatty, platter);
-            }
+            currentPatty++;
         }
-        currentPatty++;
     }
 
     public void playerTwoTurn(player plays) {
         if(!CPU){
             playerOneTurn(plays);
         }else {
-            //code for AI
+            //Yea no, im actually not going to do hyperbolics and stuff okay?
+            //ok fine, ill do it
             currentPatty++;
         }
     }
@@ -117,6 +133,7 @@ public class Mainthing {
     public void playGame() {
         while(player1.getHealth() > 0 && player2.getHealth() > 0){
             playerOneTurn(player1);
+            //we only need to check only p2, as p1 is checked in the if statement
             if(player2.getHealth() <= 0){
                 break;
             }
