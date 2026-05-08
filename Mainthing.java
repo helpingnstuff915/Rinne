@@ -27,7 +27,8 @@ public class Mainthing {
         if (ask("Do you want to play?","yes,no").equals("no")) {
             System.exit(0);
         }
-        if(ask("Skip intro?","yes,no").equals("no")){
+        ask("Skip intro?","yes,no");
+        if(lastAnswer.equals("no")||lastAnswer.equals("o")||lastAnswer.equals("n")){
             type("This is a game about patties. ", 100, "Green");
             type("You have to eat them to win.", 100, "Green");
             type("But be careful, some of them are poisoned and will kill you.", 100, "Green");
@@ -91,11 +92,12 @@ public class Mainthing {
     }
     public void playerOneTurn(player plays) {
         while(true){
+            boolean success = false;
             type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
             //show power-ups
-            type("You have " + plays.getHealth() + " HP",100,"Green");
+            type("You have " + plays.getHealth() + " HP",100,"Yellow");
             type("You have " + plays.getDoublePatty() + " double patty, " + plays.getSkipTurn() + 
-            " skip turn, and " + plays.getRearange() + " rearrange power-ups!", 100, "Green");
+            " skip turn, and " + plays.getRearange() + " rearrange power-ups!", 100, "Yellow");
             //ask if they want to use a power-up
             type("Type eat to eat a patty", 100, "Yellow");
             type("Type powerup to use a power-up", 100, "Yellow");
@@ -120,9 +122,11 @@ public class Mainthing {
                         player1.setSkipNextTurn(false);
                         player2.setSkipNextTurn(false);
                     }
+                    success = true;
                 }
                 case "powerup"->{
                     plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
+                    success = true;
                 }
                 case "give"->{
                     type("You gave the patty to " + player2.getName() + "!", 100, "Green");
@@ -142,8 +146,13 @@ public class Mainthing {
                         player1.setSkipNextTurn(false);
                         player2.setSkipNextTurn(false);
                     }
+                    success = true;
                 }
             }
+            if(!success){
+                type("Please choose an option " + plays.getName()+"!",100,"Red");
+            }
+        }
             // if (currentPatty >= platter.getPatties().length) {
             //     Mainthing.type("Tray empty! Ordering more...", 100, "Yellow");
             //     platter.setOrder(); //refills the tray array
@@ -151,7 +160,6 @@ public class Mainthing {
             // }else{
             //     currentPatty++;
             // }
-        }
     }
 
     public void playerTwoTurn(player plays) {
@@ -185,7 +193,7 @@ public class Mainthing {
         question = question + "?";//Incase you forget to add a question mark, it adds it for you
         //if you already did then it makes it look more emphasized, so its alr
         while(!valid){
-            System.out.println(question);
+            type(question,30,"Blue");
             String answer = scammer.nextLine();//jaja, scammer lol
             //in case anything goes
             if(options == null) {
@@ -209,6 +217,7 @@ public class Mainthing {
         final String Green = "\u001B[32m";
         final String Blue = "\u001B[34m";
         final String Yellow = "\u001B[33m";
+        final String CyanOnWhite = "\u001B[36;47m";
         switch (colour) {
             case "Red"->{
                 colour = Red;
@@ -221,6 +230,8 @@ public class Mainthing {
             }
             case "Yellow"->{
                 colour = Yellow;
+            }case "CyanOnWhite"->{
+                colour = CyanOnWhite;
             }
             default->{
                 // No color

@@ -126,6 +126,7 @@ public class player{
                         Mainthing.type("You don't have any rearrange power-ups left!", 100, "Red");
                     }else{
                         if(Mainthing.currentPatty == 0){
+                            //hmm, idk it confuses the ai
                             Mainthing.type("You can't rearrange the patties on the first turn!", 100, "Red");
                         } else {
                             this.rearange -= 1;
@@ -161,9 +162,11 @@ public class player{
                 }
                 doubleNextPatty = false;   
                 Mainthing.type(this.getName() + " lost 2 HP",100,"Red");
+                Mainthing.type(this.getName() + " has " + this.getHealth() + "HP remaining",100,"Red");
             } else {
                 this.health -= 1;
                 Mainthing.type(this.getName() + " lost 1 HP",100,"Red");
+                Mainthing.type(this.getName() + " has " + this.getHealth() + "HP remaining",100,"Red");
             }
             this.doubleNextPatty = false;
         }else{
@@ -187,10 +190,10 @@ public class player{
             if(this.getRearange() > 0){
                 this.setRearange(this.getRearange()-1);//advanced stuff lol
                 p.flip();//flip dem patties boi
-                Mainthing.type("IDK flip the patties or smth",100,"Green");
+                Mainthing.type("IDK flip the patties or smth",100,"CyanOnWhite");
             }else{
-                Mainthing.type("Ngl...",100,"Green");
-                Mainthing.type("I think you should take the L",100,"Green");
+                Mainthing.type("Ngl...",100,"CyanOnWhite");
+                Mainthing.type("I think you should take the L",100,"CyanOnWhite");
                 rival.eatPatty(currentPatty, p);
             }
         }
@@ -208,37 +211,37 @@ public class player{
 //increasing the odds of the next patty being poisoned
             if(probability > 0.5 ){
                 if(Math.random()>0.55){
-                    Mainthing.type("Screw it, Ima risk it for a biscut",100,"Green");
+                    Mainthing.type("Screw it, Ima risk it for a biscut",100,"CyanOnWhite");
                     this.eatPatty(currentPatty, p);
                 }else{
-                    Mainthing.type("Ngl...",100,"Green");
-                    Mainthing.type("I think you should take the L",100,"Green");
+                    Mainthing.type("Ngl...",100,"CyanOnWhite");
+                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
                     rival.eatPatty(currentPatty, p);
                 }
             }if(probability > 0.4 ){
                 if(Math.random()>0.35){
-                    Mainthing.type("Lets js get this over with...",100,"Green");
+                    Mainthing.type("Lets js get this over with...",100,"CyanOnWhite");
                     this.eatPatty(currentPatty, p);
                 }else{
-                    Mainthing.type("Ngl...",100,"Green");
-                    Mainthing.type("I think you should take the L",100,"Green");
+                    Mainthing.type("Ngl...",100,"CyanOnWhite");
+                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
                     rival.eatPatty(currentPatty, p);
                 }
             }if(probability > 0.3 ){
                 if(Math.random()>0.15){
                     this.eatPatty(currentPatty, p);
                 }else{
-                    Mainthing.type("Nah this is too easy",100,"Green");
-                    Mainthing.type("I think you should take the L",100,"Green");
+                    Mainthing.type("Nah this is too easy",100,"CyanOnWhite");
+                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
                     rival.eatPatty(currentPatty, p);
                 }
             }else{
                 if(Math.random()>0.95){
-                    Mainthing.type("Ngl...",100,"Green");
-                    Mainthing.type("Ima give it for funsies lol",100,"Green");
+                    Mainthing.type("Ngl...",100,"CyanOnWhite");
+                    Mainthing.type("Ima give it for funsies lol",100,"CyanOnWhite");
                     rival.eatPatty(currentPatty, p);
                 }else{
-                    Mainthing.type("Pickles, lettuce, onions,...",100,"Green");
+                    Mainthing.type("Pickles, lettuce, onions,...",100,"CyanOnWhite");
                     this.eatPatty(currentPatty, p);
                 }
             }
