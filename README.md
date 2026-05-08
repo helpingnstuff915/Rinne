@@ -12,6 +12,10 @@ Skip Turn: self-explanatory, skips your opponents turn. Can only be used once pe
 
 Rearange: Rearranges the burgers in the tray. This doesnt do much since you didn't know the position of the patties anyways, but makes things interesting.
 
+Bandage: give you +1 HP. Can be used at any point in the game (except death. We are not necromancers).
+
+Magnifying Glass: Lets you see if the burger you are about to eat is poisoned.
+
 WARNING! The computah is very advanced! It uses some advanced probability calculations (hypergeometric distributions) to decide the make the best decision. It has an experimental winrate of about 57%. Patch 1.7 gives it a custom text color and background scheme that normal players dont get along with some questionable dialogue...?
 
 Thanks for reading the readme file

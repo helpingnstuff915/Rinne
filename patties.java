@@ -27,7 +27,7 @@ public class patties{
     }
 
     public boolean isPoisoned(int currentPatty){
-        return order[currentPatty] != 0;
+        return order[Mainthing.currentPatty] != 0;
     }
 
     public void setOrder() {

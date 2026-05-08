@@ -29,14 +29,21 @@ public class Mainthing {
         }
         ask("Skip intro?","yes,no");
         if(lastAnswer.equals("no")||lastAnswer.equals("o")||lastAnswer.equals("n")){
-            type("This is a game about patties. ", 100, "Green");
-            type("You have to eat them to win.", 100, "Green");
-            type("But be careful, some of them are poisoned and will kill you.", 100, "Green");
-            type("You can also get power-ups like double patty, skip turn, and rearrange.", 100, "Green");
-            type("Good luck!", 100, "Green");
+            type("This is a game about Burgers. ", 100, "Green");
+            type("You have to eat them and be the last one standing to win.", 100, "Green");
+            type("But be careful, some of them are poisoned and will kill you!", 100, "Green");
+            type("You can also get power-ups like: ", 100, "Green");
+            type("---", 40, "Green");
+            type("Double patty: makes the next Burger deal twice the damaga", 40, "Green");
+            type("Skip Turn: skips your rivals next turn", 40, "Green");
+            type("Rearrange: flips the order of the patties", 40, "Green");
+            type("Bandage: Gives you +1 HP", 40, "Green");
+            type("Magnifying class: lets you see if the current patty is poisoned", 40, "Green");
+            type("---", 40, "Green");
+            type("You can play against a friend or the computer", 100, "Green");
+            type("That's all for now, Good luck!", 100, "Green");
         }
     }
-
     public static void gameOver(player winner){
         newGame = false;
         type("Game Over! " + winner.getName() + " wins!", 100, "Yellow");
@@ -71,9 +78,9 @@ public class Mainthing {
         }
         while(true){
             //somehow, you can get 0 patties???
-            int pattiesNum = Integer.parseInt(ask("How many patties are we ordering? (max 20, min 2)", "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"));
+            int pattiesNum = Integer.parseInt(ask("How many Burgers are we ordering? (max 20, min 2)", "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"));
             if(pattiesNum <= 1){
-                type("Oh noes, you need at least 2 patties!",100,"Red");
+                type("Oh noes, you need at least 2 Burgers!",100,"Red");
                 continue;
             }
             platter.setPattyNum(pattiesNum);
@@ -88,7 +95,7 @@ public class Mainthing {
             }
             platter = new patties(pattiesNum, Integer.parseInt(lastAnswer));
             platter.setOrder();
-            int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 5, Min 0)", "0,1,2,3,4,5"));
+            int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 9, Min 0)", "0,1,2,3,4,5,6,7,8,9"));
             
             player1.powerUpsInit(powersCount);
             player2.powerUpsInit(powersCount);
@@ -142,6 +149,9 @@ public class Mainthing {
                 case "powerup"->{
                     plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
                     success = true;
+                }case "powerups"->{
+                    plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
+                    success = true;
                 }
                 case "give"->{
                     type("You gave the patty to " + player2.getName() + "!", 100, "Green");
@@ -190,7 +200,7 @@ public class Mainthing {
         while(player1.getHealth() >= 0 && player2.getHealth() >= 0){
 
             if (currentPatty >= platter.getPatties().length) {
-                Mainthing.type("All patties finished! Ordering a new round...", 100, "Yellow");
+                Mainthing.type("All Burgers finished! Ordering a new round...", 100, "Yellow");
                 platter.setOrder();//redo the tray
                 currentPatty = 0;//reset
             }
