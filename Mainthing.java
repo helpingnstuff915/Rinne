@@ -41,6 +41,11 @@ public class Mainthing {
         newGame = false;
         type("Game Over! " + winner.getName() + " wins!", 100, "Yellow");
         if(ask("Do you want to play again?","yes,no").equals("no")) {
+            type("Ight", 100, "Red");
+            type("then,", 100, "Blue");
+            type("Cya", 100, "Yellow");
+            type("around,", 100, "Green");
+            type(winner.getName()+"!",100,"CyanOnWhite");
             System.exit(0);
         }else{
             Mainthing nextGame = new Mainthing();
@@ -54,14 +59,15 @@ public class Mainthing {
         Mainthing.platter = new patties(0, 0);//num of patties, num of poisoned patties
         if(newGame){
             intro();
+            player1.setName(ask("What is your name",null));
+            type("Hello " + player1.getName() +"", 100, "Yellow");
         }
-        player1.setName(ask("What is your name",null));
-        type("Hello " + player1.getName() +"", 100, "Yellow");
         if (ask("are you playing against a friend or the computer","friend,computer").equals("friend")) {
             player2.setName(ask("What is your friend's name",null));
         // } else if (lastAnswer.equals("computer")) { we dont actually need this, for this case!
         } else {
-            player2.setName("Computer");
+            player2.setName("The Computer");
+            CPU = true;
         }
         while(true){
             //somehow, you can get 0 patties???
@@ -82,10 +88,19 @@ public class Mainthing {
             }
             platter = new patties(pattiesNum, Integer.parseInt(lastAnswer));
             platter.setOrder();
-            int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 5)", "0,1,2,3,4,5"));
+            int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 5, Min 0)", "0,1,2,3,4,5"));
+            
             player1.powerUpsInit(powersCount);
             player2.powerUpsInit(powersCount);
-            player1.setHealth(Integer.parseInt(ask("How many lives is dealt to each player? (max 10)", "1,2,3,4,5,6,7,8,9,10")));
+            while(true){
+                player1.setHealth(Integer.parseInt(ask("How many lives is dealt to each player? (max 10, Min 0)", "1,2,3,4,5,6,7,8,9,10")));
+                if(pattiesNum <= 1){
+                    type("Oh noes, you need to get a life!",100,"Red");
+                    //dang thats messed up lol
+                    continue;
+                }       
+                break;       
+            }
             player2.setHealth(Integer.parseInt(lastAnswer));
             break;//inorder to end the loop.
         }
@@ -96,17 +111,17 @@ public class Mainthing {
             type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
             //show power-ups
             type("You have " + plays.getHealth() + " HP",100,"Yellow");
-            type("You have " + plays.getDoublePatty() + " double patty, " + plays.getSkipTurn() + 
-            " skip turn, and " + plays.getRearange() + " rearrange power-ups!", 100, "Yellow");
             //ask if they want to use a power-up
             type("Type eat to eat a patty", 100, "Yellow");
-            type("Type powerup to use a power-up", 100, "Yellow");
+            if(plays.hasPowerups()){
+                type("Type powerup to use a power-up", 100, "Yellow");
+            }
             type("Type give to give the patty to the opponent", 100, "Yellow");
             ask("What do you want to do?","eat,powerup,give");
-            switch (lastAnswer) {
+            switch (lastAnswer.toLowerCase()) {
                 case "eat"->{
                     type("You ate the patty!", 100, "Green");
-                    plays.eatPatty(currentPatty, platter);
+                    plays.eatPatty(platter);
                     if (player1.getHealth() <= 0) {
                         type(player1.getName() + " was poisoned to death!", 100, "Red");
                         gameOver(player2);
@@ -130,7 +145,7 @@ public class Mainthing {
                 }
                 case "give"->{
                     type("You gave the patty to " + player2.getName() + "!", 100, "Green");
-                    player2.eatPatty(currentPatty, platter);
+                    player2.eatPatty(platter);
                     if (player1.getHealth() <= 0) {
                         type(player1.getName() + " was poisoned to death!", 100, "Red");
                         gameOver(player2);
@@ -245,7 +260,7 @@ public class Mainthing {
                 Thread.currentThread().interrupt();
                 return;
             }
-            System.out.print(""+colour + c+ "");
+            System.out.print("" + colour + c + "");
         }
         System.out.println();
     }
@@ -253,6 +268,6 @@ public class Mainthing {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");//this is some cool stuff, Ansi escape codes
         //Were also going to use ansi stuff for colors
-        System.out.flush();
+        System.out.flush();//clear console
     }
 }
