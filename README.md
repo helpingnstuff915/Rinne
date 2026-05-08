@@ -2,14 +2,16 @@
 The repo for the "Rinne" text based game
 "Rinne" means the cycle of life, death, and rebirth. I thought it would be a cool name for this version of russian roulette that I made.
 
-Basically, the rules are the same except you have a roll based system (like in Dnd).
-This doesnt not apply to who you choose to shoot, it only affects the special moves.
-The specials moves are switch, and fill-in (not exactly the best names, i know)
+In this game, you need to eat burgers and be the last one standing, as some of the patties are poisoned! However, you get to choose how many burgers there are and how many of the patties are poisoned. You can play against a friend or against the big brain computah
 
-Switch lets you flip the order of the bullets. This is technically random, but apparently makes the chances a little different? (If you know binomial, geometric, and hypergeometric distributions, that is). 
+There are also 3 powerups you can get! 
 
-Fill-in lets you place in a bullet, not on your turn, but right before your opponents turn (cs then you'd js use all the blanks on yourself, thats kinda... boring smh) The idea is that you tell your opponent wether or not you put a live bullet in. If they guess right, meaning shoot you if its live or shoot themselves if its blank, they get an advantage. If they shoot you and its blank, you get to skip their turn once at anytime in the game (which can only be redeemed once, but it can stack if you win again). If they shoot you and its live, you get double the damage (it stacks if its a double barrel). If they shoot themselves and its blank, they get to skip your turn at anytime in the game, once. If they shoot themselves and its live, they get double the damage.
+Double patty: makes the next patty have 2 patties, therefore increasing the damage if poisoned! However, if the patty is not poisoned, nothing happens.
 
-Basically whoever gets shot get double the damage, and whoever gets the blank, the other gets a skip.
+Skip Turn: self-explanatory, skips your opponents turn. Can only be used once per turn.
 
-Oh and also, its replaced with burgers. SO like, you gotta eat a burger and check if its poisoned or not. Nah actualy, ima named it FRIED (like the fried liver attack), and you gotta eat fries. how bout it?
+Rearange: Rearranges the burgers in the tray. This doesnt do much since you didn't know the position of the patties anyways, but makes things interesting.
+
+WARNING! The computah is very advanced! It uses some advanced probability calculations (hypergeometric distributions) to decide the make the best decision. It has an experimental winrate of about 57%. Patch 1.7 gives it a custom text color and background scheme that normal players dont get along with some questionable dialogue...?
+
+Thanks for reading the readme file
