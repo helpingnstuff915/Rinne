@@ -237,8 +237,12 @@ public class player{
             }
             this.doubleNextPatty = false;
         }else{
-            Mainthing.type("Mmm... tasty!",100,"Green");
-            Mainthing.type("This patty is safe!",100,"Green");
+            Mainthing.type("Mmm... tasty!", 100, "Green");
+            Mainthing.type("This patty is safe!", 100, "Green");
+            if(Math.random()>0.6){
+                this.health +=1;
+                Mainthing.type(this.getName() + " gained +1 HP!", 100, "Green");
+            }
             this.doubleNextPatty = false;
         }
         Mainthing.currentPatty++;

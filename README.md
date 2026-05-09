@@ -2,7 +2,7 @@
 The repo for the "Rinne" text based game
 "Rinne" means the cycle of life, death, and rebirth. I thought it would be a cool name for this version of russian roulette that I made.
 
-In this game, you need to eat burgers and be the last one standing, as some of the patties are poisoned! However, you get to choose how many burgers there are and how many of the patties are poisoned. You can play against a friend or against the big brain computah
+In this game, you need to eat burgers and be the last one standing, as some of the patties are poisoned! Eating a good patty gives you +1 HP and eating a poisoned one loses -1 HP. However, you get to choose how many burgers there are and how many of the patties are poisoned. You can play against a friend or against the big brain computah
 
 There are also 3 powerups you can get! 
 
@@ -17,5 +17,7 @@ Bandage: give you +1 HP. Can be used at any point in the game (except death. We 
 Magnifying Glass: Lets you see if the burger you are about to eat is poisoned.
 
 WARNING! The computah is very advanced! It uses some advanced probability calculations (hypergeometric distributions) to decide the make the best decision. It has an experimental winrate of about 57%. Patch 1.7 gives it a custom text color and background scheme that normal players dont get along with some questionable dialogue...?
+
+This was coded and tested in java ver 26!
 
 Thanks for reading the readme file
