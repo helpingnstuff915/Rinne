@@ -1,9 +1,11 @@
 //should I use OOPS? (Object oriented programming stuff, yea I put the stuff in the end)
 
 //i js want this to end bro 
+//finally it ended smh
 import java.util.Scanner;//for user input dangit
 
 public class Mainthing {
+    public static int turns = 0;
     public static boolean newGame = true;
     public static Scanner scammer = new Scanner(System.in);//heheh
     public static patties platter;
@@ -115,16 +117,22 @@ public class Mainthing {
     public void playerOneTurn(player plays) {
         while(true){
             boolean success = false;
-            type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
-            //show power-ups
-            type("You have " + plays.getHealth() + " HP",100,"Yellow");
-            //ask if they want to use a power-up
-            type("Type eat to eat a patty", 100, "Yellow");
-            if(plays.hasPowerups()){
-                type("Type powerup to use a power-up", 100, "Yellow");
+            if(turns < 3){
+                type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
+                type("You have " + plays.getHealth() + " HP",100,"Yellow");
+                type("Type eat to eat the burger", 40, "Yellow");
+                type("Type powerup to use a power up", 40, "Yellow");
+                type("Type give to give the burger to the opponent", 40, "Yellow");
+                ask("What do you want to do?","eat,powerup,give");
+            }else{
+                String powerup = "";
+                if(plays.hasPowerups()){
+                    powerup ="or powerup";
+                }
+                type(plays.getName() + "'s turn : " + plays.getHealth() + " HP", 100, "Yellow");
+                type("Options: Give, Eat, " + powerup, 100, "Yellow");
+                ask("Choose an option","eat,powerup,give");
             }
-            type("Type give to give the patty to the opponent", 100, "Yellow");
-            ask("What do you want to do?","eat,powerup,give");
             switch (lastAnswer.toLowerCase()) {
                 case "eat"->{
                     type("You ate the patty!", 100, "Green");
@@ -138,11 +146,12 @@ public class Mainthing {
                         gameOver(player1);
                         break; // This exits the loop IMMEDIATELY
                     }
-                    if(!(player1.isSkipNextTurn()||player2.isSkipNextTurn())){
-                        return;
-                    }else{
+                    if(player1.isSkipNextTurn()||player2.isSkipNextTurn()){
                         player1.setSkipNextTurn(false);
                         player2.setSkipNextTurn(false);
+                        type(plays.getName() + " has an extra turn!", 100, "Red");
+                    }else{
+                        return;
                     }
                     success = true;
                 }
@@ -165,11 +174,12 @@ public class Mainthing {
                         gameOver(player1);
                         break; // This exits the loop IMMEDIATELY
                     }
-                    if(!(player1.isSkipNextTurn()||player2.isSkipNextTurn())){
-                        return;
-                    }else{
+                    if(player1.isSkipNextTurn()||player2.isSkipNextTurn()){
                         player1.setSkipNextTurn(false);
                         player2.setSkipNextTurn(false);
+                        type(plays.getName() + " has an extra turn!", 100, "Red");
+                    }else{
+                        return;
                     }
                     success = true;
                 }
@@ -187,15 +197,6 @@ public class Mainthing {
             // }
     }
 
-    public void playerTwoTurn(player plays) {
-        if(!CPU){
-            playerOneTurn(plays);
-        }else {
-            //Yea no, im actually not going to do hyperbolics and stuff okay?
-            //ok fine, ill do it
-        }
-    }
-
     public void playGame() {
         while(player1.getHealth() >= 0 && player2.getHealth() >= 0){
 
@@ -209,7 +210,15 @@ public class Mainthing {
             if(player2.getHealth() <= 0){
                 break;
             }
-            playerTwoTurn(player2);
+
+            if(CPU){
+                //the ai ALWAYS is the second player
+                // so it always plays against p1
+                player2.decide(platter, player1);
+            }else {
+                //player one func, but with p2 stats
+                playerOneTurn(player2);
+            }
         }
     }
 

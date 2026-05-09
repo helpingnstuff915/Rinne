@@ -119,15 +119,24 @@ public class player{
         if(this.doublePatty +this.skipTurn + this.rearange + this.bandage + this.mag == 0){
             Mainthing.type("You have no power-ups left!", 100, "Red");
         }else{
-            Mainthing.type("You have " + this.doublePatty + " double patties, ", 100, "Green");
-            Mainthing.type(this.skipTurn + " skip turns,", 100, "Green");
-            Mainthing.type(this.rearange + " rearranges,", 100, "Green");
-            Mainthing.type(this.bandage + " bandages, and", 100, "Green");
-            Mainthing.type(this.mag + " magnifying glasses left.", 100, "Green");
-            Mainthing.type("Type DP(double patty), ST (skip turn), RA (rearrange)", 100, "Green");
-            Mainthing.type("BA(bandage), or MG (magnifying glass)", 100, "Green");
-            Mainthing.type("Or just type 'none' to go back", 100, "Green");
-            Mainthing.ask("Which power up do you want to use?", "DP,ST,RA,BA,MG,none");
+            if(Mainthing.turns < 3){
+                Mainthing.type("You have " + this.doublePatty + " double patties, ", 40, "Green");
+                Mainthing.type(this.skipTurn + " skip turns,", 40, "Green");
+                Mainthing.type(this.rearange + " rearranges,", 40, "Green");
+                Mainthing.type(this.bandage + " bandages, and", 40, "Green");
+                Mainthing.type(this.mag + " magnifying glasses left.", 40, "Green");
+                Mainthing.type("Type DP(double patty), ST (skip turn), RA (rearrange)", 30, "Green");
+                Mainthing.type("BA(bandage), or MG (magnifying glass)", 30, "Green");
+                Mainthing.type("Or just type 'none' to go back", 100, "Green");
+                Mainthing.ask("Which power up do you want to use?", "DP,ST,RA,BA,MG,none");
+            }else{
+                Mainthing.type("You have " + this.doublePatty + " DP, " + this.skipTurn + 
+                " ST, " + this.rearange + " RA, " + this.bandage + " BA, " + 
+                this.mag + " MG, ", 40, "Green");
+
+                Mainthing.type("type 'none' to go back", 15, "Green");
+                Mainthing.ask("Choose an option", "DP,ST,RA,BA,MG,none");
+            }
             switch (Mainthing.lastAnswer.toUpperCase()){
                 case "DP"->{
                     if(this.doublePatty <= 0){
@@ -148,7 +157,6 @@ public class player{
                             this.skipTurn -= 1;
                             this.setSkipNextTurn(true);
                             Mainthing.type("You skipped your opponent's next turn!", 100, "Green");
-
                         }
                     }
                 }
@@ -173,7 +181,6 @@ public class player{
                         this.setHealth(this.getHealth()+1);
                         Mainthing.type(this.getName() + " used a bandage and gained +1 HP!", 100, "Green");
                         Mainthing.type(this.getName() + " now has " + this.getHealth() + " HP!", 100, "Green");
-
                     }
                 }case "MG"->{
                     if(this.mag <= 0){
@@ -189,10 +196,11 @@ public class player{
                         }
 
                     }
-                }case "none"->{
-                    //valid = true; //not necessary as we end the func, but makes it more readable
-
                 }
+                // case "none"->{ // case"indecisive"->{
+                //     //valid = true; //not necessary as we end the func, but makes it more readable
+
+                // }
             }
         }
     }
@@ -241,24 +249,54 @@ public class player{
         }
     }
 
+    //make the human (playing against the ai) eat the burger
+    public void takeL(patties p, player human){
+        Mainthing.type("Ngl...",100,"CyanOnWhite");
+        Mainthing.type("I think you should take the L",100,"CyanOnWhite");
+        human.eatPatty(p);
+    }
+
+    public void aiEats(patties p, String mainText){
+        Mainthing.type(mainText,100,"CyanOnWhite");
+        Mainthing.type(this.getName() + " ate the burger",100,"Green");
+        this.eatPatty(p);
+    }
+
 //This are the methods for the AI decisions
     public void decide(patties p, player rival ){
         double probability = poisonProbability(p);
         //chance of patty being poisoned, 0.0 means low, 0.7-1 is high
+        double tempProb = Math.random();
         if(probability > 0.7){
-            if(this.getRearange() > 0){
+            if((this.getRearange() > 0) && (tempProb < 0.3)){
                 this.setRearange(this.getRearange()-1);//advanced stuff lol
-                p.flip();//flip dem patties boi
                 Mainthing.type("IDK flip the patties or smth",100,"CyanOnWhite");
+                p.flip();//flip dem patties boi
+            }else if( (tempProb<0.8) && (this.getBandage() > 0) ){
+                this.setBandage(this.getBandage()-1);
+                this.setHealth(this.getHealth()+1);
+                Mainthing.type(this.getName() + " used a bandage and gained +1 HP!", 100, "Green");
+                Mainthing.type(this.getName() + " now has " + this.getHealth() + " HP!", 100, "Green");
             }else{
-                Mainthing.type("Ngl...",100,"CyanOnWhite");
-                Mainthing.type("I think you should take the L",100,"CyanOnWhite");
-                rival.eatPatty(p);
+                takeL(p,rival);
             }
         }
         else{
             //idk bro, the ai is lowk skeptical bout this
-            if(probability > 0.6 ){
+            if(probability > 0.6){
+                if((tempProb < 0.5)&&(this.getMag() > 0)){
+                    this.setMag(this.getMag()-1);
+                    Mainthing.type(this.getName() + " is inspecting the patty...", 100, "Green");
+                    Mainthing.type("...", 500, "Red");
+                    if(p.isPoisoned(Mainthing.currentPatty)){
+                        Mainthing.type("(it's poisoned!)", 100, "Red");
+                        takeL(p,rival);
+                    }else{
+                        Mainthing.type("(it's safe!)", 100, "Green");
+                        aiEats(p,"ight bet");
+                    }
+                }
+
                 if(Math.random()>0.65){
                     this.eatPatty(p);
                 }else{
@@ -270,38 +308,28 @@ public class player{
 //increasing the odds of the next patty being poisoned
             if(probability > 0.5 ){
                 if(Math.random()>0.55){
-                    Mainthing.type("Screw it, Ima risk it for a biscut",100,"CyanOnWhite");
-                    this.eatPatty(p);
+                    aiEats(p,"Screw it, Ima risk it for a biscut");
                 }else{
-                    Mainthing.type("Ngl...",100,"CyanOnWhite");
-                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
-                    rival.eatPatty(p);
+                    takeL(p,rival);
                 }
             }if(probability > 0.4 ){
                 if(Math.random()>0.35){
-                    Mainthing.type("Lets js get this over with...",100,"CyanOnWhite");
-                    this.eatPatty(p);
+                    aiEats(p,"Lets js get this over with...");
                 }else{
-                    Mainthing.type("Ngl...",100,"CyanOnWhite");
-                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
-                    rival.eatPatty(p);
+                    takeL(p,rival);
                 }
             }if(probability > 0.3 ){
                 if(Math.random()>0.15){
-                    this.eatPatty(p);
+                    aiEats(p,"Nah this is too easy");
                 }else{
-                    Mainthing.type("Nah this is too easy",100,"CyanOnWhite");
-                    Mainthing.type("I think you should take the L",100,"CyanOnWhite");
-                    rival.eatPatty(p);
+                    takeL(p,rival);
                 }
             }else{
                 if(Math.random()>0.95){
-                    Mainthing.type("Ngl...",100,"CyanOnWhite");
                     Mainthing.type("Ima give it for funsies lol",100,"CyanOnWhite");
                     rival.eatPatty(p);
                 }else{
-                    Mainthing.type("Pickles, lettuce, onions,...",100,"CyanOnWhite");
-                    this.eatPatty(p);
+                    aiEats(p,"Pickles, lettuce, onions,...");
                 }
             }
         }
