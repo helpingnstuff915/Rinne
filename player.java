@@ -239,7 +239,7 @@ public class player{
         }else{
             Mainthing.type("Mmm... tasty!", 100, "Green");
             Mainthing.type("This patty is safe!", 100, "Green");
-            if(Math.random()>0.6){
+            if(Math.random()>0.4){
                 this.health +=1;
                 Mainthing.type(this.getName() + " gained +1 HP!", 100, "Green");
             }
@@ -268,72 +268,92 @@ public class player{
 
 //This are the methods for the AI decisions
     public void decide(patties p, player rival ){
-        double probability = poisonProbability(p);
-        //chance of patty being poisoned, 0.0 means low, 0.7-1 is high
-        double tempProb = Math.random();
-        if(probability > 0.7){
-            if((this.getRearange() > 0) && (tempProb < 0.3)){
-                this.setRearange(this.getRearange()-1);//advanced stuff lol
-                Mainthing.type("IDK flip the patties or smth",100,"CyanOnWhite");
-                p.flip();//flip dem patties boi
-            }else if( (tempProb<0.8) && (this.getBandage() > 0) ){
-                this.setBandage(this.getBandage()-1);
-                this.setHealth(this.getHealth()+1);
-                Mainthing.type(this.getName() + " used a bandage and gained +1 HP!", 100, "Green");
-                Mainthing.type(this.getName() + " now has " + this.getHealth() + " HP!", 100, "Green");
-            }else{
-                takeL(p,rival);
+        int pastPatty = Mainthing.currentPatty;
+        while(true){
+            double probability = poisonProbability(p);
+            //chance of patty being poisoned, 0.0 means low, 0.7-1 is high
+            if( (probability > 0.8) && (!rival.isSkipNextTurn()) ){
+                rival.setSkipTurn(this.getSkipTurn()-1);
+                Mainthing.type(this.getName() + " used a skip turn!", 100, "Yellow");
             }
-        }
-        else{
-            //idk bro, the ai is lowk skeptical bout this
-            if(probability > 0.6){
-                if((tempProb < 0.5)&&(this.getMag() > 0)){
-                    this.setMag(this.getMag()-1);
-                    Mainthing.type(this.getName() + " is inspecting the patty...", 100, "Green");
-                    Mainthing.type("...", 500, "Red");
-                    if(p.isPoisoned(Mainthing.currentPatty)){
-                        Mainthing.type("(it's poisoned!)", 100, "Red");
-                        takeL(p,rival);
+            if(probability > 0.7){
+                if(Math.random() > 0.7){
+                    this.setSkipTurn(this.getSkipTurn()-1);
+                    Mainthing.type(this.getName() + " used a skip turn!", 100, "Yellow");
+                }else{
+                    if((this.getRearange() > 0) && (Math.random() < 0.3)){
+                        this.setRearange(this.getRearange()-1);//advanced stuff lol
+                        Mainthing.type("IDK flip the patties or smth",100,"CyanOnWhite");
+                        p.flip();//flip dem patties boi
+                    }else if( (Math.random()<0.8) && (this.getBandage() > 0) ){
+                        this.setBandage(this.getBandage()-1);
+                        this.setHealth(this.getHealth()+1);
+                        Mainthing.type(this.getName() + " used a bandage and gained +1 HP!", 100, "Green");
+                        Mainthing.type(this.getName() + " now has " + this.getHealth() + " HP!", 100, "Green");
                     }else{
-                        Mainthing.type("(it's safe!)", 100, "Green");
-                        aiEats(p,"ight bet");
+                        takeL(p,rival);
                     }
                 }
+            }
+            else{
+                //idk bro, the ai is lowk skeptical bout this
+                if(probability > 0.6){
+                    if((Math.random() < 0.5)&&(this.getMag() > 0)){
+                        this.setMag(this.getMag()-1);
+                        Mainthing.type(this.getName() + " is inspecting the patty...", 100, "Green");
+                        Mainthing.type("...", 500, "Red");
+                        if(p.isPoisoned(Mainthing.currentPatty)){
+                            Mainthing.type("(it's poisoned!)", 100, "Red");
+                            if(this.getDoublePatty() > 0){
+                                this.setDoublePatty(this.getDoublePatty()-1);
+                            }
+                            this.
+                            takeL(p,rival);
+                        }else{
+                            Mainthing.type("(it's safe!)", 100, "Green");
+                            aiEats(p,"ight bet");
+                        }
+                    }
 
-                if(Math.random()>0.65){
-                    this.eatPatty(p);
+                    if(Math.random()>0.65){
+                        this.eatPatty(p);
+                    }else{
+                        rival.eatPatty(p);
+                    }
+                }
+    //The ai is more likely to give rather than eat at 50%
+    //This is an defensive tactic, protecting future safety by
+    //increasing the odds of the next patty being poisoned
+                if(probability > 0.5 ){
+                    if(Math.random()>0.55){
+                        aiEats(p,"Screw it, Ima risk it for a biscut");
+                    }else{
+                        takeL(p,rival);
+                    }
+                }if(probability > 0.4 ){
+                    if(Math.random()>0.35){
+                        aiEats(p,"Lets js get this over with...");
+                    }else{
+                        takeL(p,rival);
+                    }
+                }if(probability > 0.3 ){
+                    if(Math.random()>0.15){
+                        aiEats(p,"Nah this is too easy");
+                    }else{
+                        takeL(p,rival);
+                    }
                 }else{
-                    rival.eatPatty(p);
+                    if(Math.random()>0.95){
+                        Mainthing.type("Ima give it for funsies lol",100,"CyanOnWhite");
+                        rival.eatPatty(p);
+                    }else{
+                        aiEats(p,"Pickles, lettuce, onions,...");
+                    }
                 }
             }
-//The ai is more likely to give rather than eat at 50%
-//This is an defensive tactic, protecting future safety by
-//increasing the odds of the next patty being poisoned
-            if(probability > 0.5 ){
-                if(Math.random()>0.55){
-                    aiEats(p,"Screw it, Ima risk it for a biscut");
-                }else{
-                    takeL(p,rival);
-                }
-            }if(probability > 0.4 ){
-                if(Math.random()>0.35){
-                    aiEats(p,"Lets js get this over with...");
-                }else{
-                    takeL(p,rival);
-                }
-            }if(probability > 0.3 ){
-                if(Math.random()>0.15){
-                    aiEats(p,"Nah this is too easy");
-                }else{
-                    takeL(p,rival);
-                }
-            }else{
-                if(Math.random()>0.95){
-                    Mainthing.type("Ima give it for funsies lol",100,"CyanOnWhite");
-                    rival.eatPatty(p);
-                }else{
-                    aiEats(p,"Pickles, lettuce, onions,...");
+            if(!rival.isSkipNextTurn()){
+                if(Mainthing.currentPatty != pastPatty){
+                    return;
                 }
             }
         }

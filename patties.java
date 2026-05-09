@@ -45,20 +45,20 @@ public class patties{
     }
 
     public void flip(){//flip the patties lol (reverses order of array)
-        int first = Mainthing.currentPatty;
-        int last = order.length-1;
+        // int first = Mainthing.currentPatty;
+        // int last = order.length-1;
 
-        while(first < last){
-            int test = order[first];
-            order[first] = order[last];
-            order[last] = test;
-            first++;
-            last++;
-        }
-        // for (int i = 0; i < order.length / 2; i++) {
-        //     int temp = order[i];
-        //     order[i] = order[order.length - 1 - i];
-        //     order[order.length - 1 - i] = temp;
+        // while(first < last){
+        //     int test = order[first];
+        //     order[first] = order[last];
+        //     order[last] = test;
+        //     first++;
+        //     last++;
         // }
+        for (int i = 0; i < order.length / 2; i++) {
+            int temp = order[i];
+            order[i] = order[order.length - 1 - i];
+            order[order.length - 1 - i] = temp;
+        }
     }
 }

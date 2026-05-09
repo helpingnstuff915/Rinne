@@ -207,7 +207,7 @@ public class Mainthing {
             }
             playerOneTurn(player1);
             //we only need to check only p2, as p1 is checked in the if statement
-            if(player2.getHealth() <= 0){
+            if((player2.getHealth() <= 0) || player1.getHealth() <= 0){
                 break;
             }
 
