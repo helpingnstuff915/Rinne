@@ -5,6 +5,7 @@
 import java.util.Scanner;//for user input dangit
 
 public class Mainthing {
+    public static boolean doublePattyNextPatty = false;
     public static int turns = 0;
     public static boolean newGame = true;
     public static Scanner scammer = new Scanner(System.in);//heheh
@@ -123,7 +124,7 @@ public class Mainthing {
                 type("Type eat to eat the burger", 40, "Yellow");
                 type("Type powerup to use a power up", 40, "Yellow");
                 type("Type give to give the burger to the opponent", 40, "Yellow");
-                ask("What do you want to do?","eat,powerup,give");
+                ask("What do you want to do?","eat,powerup,powerups,give");
             }else{
                 String powerup = "";
                 if(plays.hasPowerups()){
@@ -131,7 +132,7 @@ public class Mainthing {
                 }
                 type(plays.getName() + "'s turn : " + plays.getHealth() + " HP", 100, "Yellow");
                 type("Options: Give, Eat, " + powerup, 100, "Yellow");
-                ask("Choose an option","eat,powerup,give");
+                ask("Choose an option","eat,powerup,powerups,give");
             }
             switch (lastAnswer.toLowerCase()) {
                 case "eat"->{
@@ -206,6 +207,7 @@ public class Mainthing {
                 currentPatty = 0;//reset
             }
             playerOneTurn(player1);
+            turns++;
             //we only need to check only p2, as p1 is checked in the if statement
             if((player2.getHealth() <= 0) || player1.getHealth() <= 0){
                 break;
@@ -218,6 +220,7 @@ public class Mainthing {
             }else {
                 //player one func, but with p2 stats
                 playerOneTurn(player2);
+                turns++;
             }
         }
     }
