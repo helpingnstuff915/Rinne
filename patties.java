@@ -1,7 +1,8 @@
 public class patties{
-    private int[] order;
-    private int poisoned;
-    private int pattyNum;
+    private int[] order;//The array that holds the position of the safe and poisoned patties
+    private int poisoned;//number of poisoned patties
+    private int pattyNum;//numberf of patties
+
     public patties(int pattyNum, int poisoned){
         this.poisoned = poisoned;
         this.pattyNum = pattyNum;
@@ -16,12 +17,11 @@ public class patties{
 
     public void setPoisoned(int poisoned) {
         this.poisoned = poisoned;
-    }
-
-    public int getPoisoned() {
+    }public int getPoisoned() {
         return poisoned;
     }
 
+    //give the patties tray
     public int[] getPatties() {
         return order;
     }
@@ -30,8 +30,9 @@ public class patties{
         return order[Mainthing.currentPatty] != 0;
     }
 
+    //set the order of the patties (by initial setup or rearrange powerup)
     public void setOrder() {
-            java.util.Arrays.fill(order, 0); // re-init all array values
+            java.util.Arrays.fill(order, 0); // re-initialize all array values
             int filled = 0;
 
             while (filled < poisoned) {

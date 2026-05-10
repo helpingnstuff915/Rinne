@@ -1,35 +1,28 @@
-//should I use OOPS? (Object oriented programming stuff, yea I put the stuff in the end)
-
-//i js want this to end bro 
-//finally it ended smh
-import java.util.Scanner;//for user input dangit
+import java.util.Scanner;//for user input
 
 public class Mainthing {
-    public static boolean doublePattyNextPatty = false;
-    public static int turns = 0;
+    public static boolean doublePattyNextPatty = false;//Is the next patty a double patty?
+    public static int turnsPassed = 0;//this is for deciding when to activate compact text mode
     public static boolean newGame = true;
-    public static Scanner scammer = new Scanner(System.in);//heheh
-    public static patties platter;
+    public static Scanner scammer = new Scanner(System.in);//heheh, for user input
+    public static patties platter;//The array for containing the patties
     public static String lastAnswer = "";
     public static int currentPatty = 0;
     player player1 = new player("placeholder", 0, 0, 0, 0);//name, health, attack, defense
     player player2 = new player("placeholder", 0, 0, 0, 0);//adding details later
+    //Player 2 can either be a human player or the CPU
     
-    public static boolean CPU = false;//against computer
-    public static void main(String[] args) {//I keep forgetting how to init, i js copy paste
+    public static boolean playingAgainstCPU = false;//against computer
+    public static void main(String[] args) {
         type("init", 100, "Red");//js letting you know that its running
         Mainthing game = new Mainthing();
-        game.setupGame();
-        game.playGame();
+        game.setupGame();//setup for game loop
+        game.playGame();//game loop, can ask to start another game here aswell
     }
 
-    public static void intro () {
+    public static void intro () {//introduction, runs if desired by player
         clearScreen();
         type("Welcome to the game!", 100, "Yellow");
-        //for funsies
-        if (ask("Do you want to play?","yes,no").equals("no")) {
-            System.exit(0);
-        }
         ask("Skip intro?","yes,no");
         if(lastAnswer.equals("no")||lastAnswer.equals("o")||lastAnswer.equals("n")){
             type("This is a game about Burgers. ", 100, "Green");
@@ -48,7 +41,7 @@ public class Mainthing {
         }
     }
     public static void gameOver(player winner){
-        newGame = false;
+        newGame = false;//If a new game starts, skip intro
         type("Game Over! " + winner.getName() + " wins!", 100, "Yellow");
         if(ask("Do you want to play again?","yes,no").equals("no")) {
             type("Ight", 100, "Red");
@@ -56,7 +49,7 @@ public class Mainthing {
             type("Cya", 100, "Yellow");
             type("around,", 100, "Green");
             type(winner.getName()+"!",100,"CyanOnWhite");
-            System.exit(0);
+            System.exit(0);//exit game
         }else{
             Mainthing nextGame = new Mainthing();
             nextGame.setupGame();
@@ -74,17 +67,16 @@ public class Mainthing {
         }
         if (ask("are you playing against a friend or the computer","friend,computer").equals("friend")) {
             player2.setName(ask("What is your friend's name",null));
-        // } else if (lastAnswer.equals("computer")) { we dont actually need this, for this case!
         } else {
             player2.setName("The Computer");
-            CPU = true;
+            playingAgainstCPU = true;
         }
+        //Setup loop, this is a safety incase the ask function lets an invalid answer pass
         while(true){
-            //somehow, you can get 0 patties???
             int pattiesNum = Integer.parseInt(ask("How many Burgers are we ordering? (max 20, min 2)", "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"));
             if(pattiesNum <= 1){
                 type("Oh noes, you need at least 2 Burgers!",100,"Red");
-                continue;
+                continue;//Restart the loop, without executing the rest of the code
             }
             platter.setPattyNum(pattiesNum);
             String poisonedOptions = "";
@@ -92,21 +84,24 @@ public class Mainthing {
                 poisonedOptions += i + (i < pattiesNum - 1 ? "," : "");
             }
             ask("How many of them are poisoned? (max " + (pattiesNum - 1) + ")", poisonedOptions);
+            //Must be 1 or above, or 1 LESS than the number of patties (1 safe, all others poisoned)
             if(Integer.parseInt(lastAnswer) < 1 || Integer.parseInt(lastAnswer) >= pattiesNum){
                 type("Invalid poisoned patties count!",100,"Red");
                 continue;
             }
+            //Create array with random positioning of patties
             platter = new patties(pattiesNum, Integer.parseInt(lastAnswer));
             platter.setOrder();
             int powersCount = Integer.parseInt(ask("How many power-ups do you want? (max 9, Min 0)", "0,1,2,3,4,5,6,7,8,9"));
             
+            //Initialize powerups
             player1.powerUpsInit(powersCount);
             player2.powerUpsInit(powersCount);
             while(true){
                 player1.setHealth(Integer.parseInt(ask("How many lives is dealt to each player? (max 10, Min 0)", "1,2,3,4,5,6,7,8,9,10")));
                 if(pattiesNum <= 1){
                     type("Oh noes, you need to get a life!",100,"Red");
-                    //dang thats messed up lol
+                //As a punishment for making a mistake at this point, you need to start over setup
                     continue;
                 }       
                 break;       
@@ -115,10 +110,11 @@ public class Mainthing {
             break;//inorder to end the loop.
         }
     }
-    public void playerOneTurn(player plays) {
+    public void normalTurn(player plays) {
+        //While a turn ending action is not taken (break;), keep playing 
         while(true){
-            boolean success = false;
-            if(turns < 3){
+            boolean success = false;//Check if inputed option is valid, then display err msg
+            if(turnsPassed < 3){
                 type("It's " + plays.getName() + "'s turn!", 100, "Yellow");
                 type("You have " + plays.getHealth() + " HP",100,"Yellow");
                 type("Type eat to eat the burger", 40, "Yellow");
@@ -159,6 +155,7 @@ public class Mainthing {
                 case "powerup"->{
                     plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
                     success = true;
+                //This is incase, like me, you accidentally say "powerups" instead of "powerup"
                 }case "powerups"->{
                     plays.powerUps(platter, (player1.isSkipNextTurn() || player2.isSkipNextTurn()) );
                     success = true;
@@ -198,37 +195,40 @@ public class Mainthing {
             // }
     }
 
+    //Main game loop, between setupGame() and gameOver()
     public void playGame() {
+        //While players are alive (HP above 0)
         while(player1.getHealth() >= 0 && player2.getHealth() >= 0){
-
+            if( (player1.getHealth() <= 0) || (player2.getHealth() <= 0)){
+                break;
+            }
+            //If currentPatty > array.length, it will give an out of bounds exception. Refil the tray
             if (currentPatty >= platter.getPatties().length) {
                 Mainthing.type("All Burgers finished! Ordering a new round...", 100, "Yellow");
                 platter.setOrder();//redo the tray
                 currentPatty = 0;//reset
             }
-            playerOneTurn(player1);
-            turns++;
+            normalTurn(player1);
+            turnsPassed++;
             //we only need to check only p2, as p1 is checked in the if statement
             if((player2.getHealth() <= 0) || player1.getHealth() <= 0){
                 break;
             }
 
-            if(CPU){
+            if(playingAgainstCPU){
                 //the ai ALWAYS is the second player
                 // so it always plays against p1
-                player2.decide(platter, player1);
+                player2.aiTurn(platter, player1);
             }else {
                 //player one func, but with p2 stats
-                playerOneTurn(player2);
-                turns++;
+                normalTurn(player2);
+                turnsPassed++;
             }
         }
     }
 
     public static String ask(String question, String options) {
-        boolean valid = false;
-        question = question + "?";//Incase you forget to add a question mark, it adds it for you
-        //if you already did then it makes it look more emphasized, so its alr
+        boolean valid = false;//error checking
         while(!valid){
             type(question,30,"Blue");
             String answer = scammer.nextLine();//jaja, scammer lol
@@ -250,11 +250,12 @@ public class Mainthing {
         @SuppressWarnings("BusyWait")
     //also had to ask ai to help with the thread bit
     public static void type(String text, int speed, String colour) {
-        final String Red = "\u001B[31m";
-        final String Green = "\u001B[32m";
-        final String Blue = "\u001B[34m";
-        final String Yellow = "\u001B[33m";
-        final String CyanOnWhite = "\u001B[36;47m";
+        //ANSI escape codes for the colours
+        final String Red = "\u001B[31m";//Error colour
+        final String Green = "\u001B[32m";//Good news/eat patty colour
+        final String Blue = "\u001B[34m";//Ask question colour
+        final String Yellow = "\u001B[33m";//Game narration colour
+        final String CyanOnWhite = "\u001B[36;47m";//AI dialogue colour
         switch (colour) {
             case "Red"->{
                 colour = Red;
@@ -274,7 +275,7 @@ public class Mainthing {
                 // No color
             }
         }
-
+        //There is no "delay" function, so we divert resources to waste time
         for (char c : text.toCharArray()) {
             try {
                 Thread.sleep(speed);

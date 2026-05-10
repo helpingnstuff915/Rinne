@@ -11,7 +11,7 @@ You can try out the live demo here!
 
 ## Setup
 
-1. Download the java files
+1. Download the java files from github
 2. Run Mainthing.java (main file) in JDK version 17 or higher (Most stable java version)
 3. If any errors occur, it usually becauce its looking for "main.java" class, but the main file here is named Mainthing. Please rename the files to fix this or run ```java Mainthing.java ```
 
